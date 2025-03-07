@@ -220,28 +220,28 @@ public class GridPlacer : MonoBehaviour
             return;
         }
 
-        // Try to find an empty spot (maximum 10 attempts to prevent infinite loop)
+        
         for (int attempts = 0; attempts < 10; attempts++)
         {
-            // Generate random position
+           
             int randomX = Random.Range(0, gridWidth);
             int randomY = Random.Range(0, gridHeight);
 
-            // Check if the current tile is a DeadTile (we only replace dead tiles)
+            
             if (gridTiles[randomX, randomY] != null && 
                 gridTiles[randomX, randomY].name.StartsWith("DeadTile"))
             {
-                // Calculate the position for the new tile
+              
                 Vector3 position = transform.position + new Vector3(
                     (randomX * cellSize) + (cellSize / 2f),
                     (randomY * cellSize) + (cellSize / 2f),
                     0
                 );
 
-                // Destroy the existing tile
+               
                 Destroy(gridTiles[randomX, randomY]);
 
-                // Get the sprite renderer from the prefab to calculate proper scaling
+              
                 SpriteRenderer foodSprite = foodTilePrefab.GetComponent<SpriteRenderer>();
                 if (foodSprite == null)
                 {
@@ -249,25 +249,25 @@ public class GridPlacer : MonoBehaviour
                     return;
                 }
 
-                // Calculate the scale needed to make the sprite fit exactly in one cell
+              
                 Vector2 spriteSize = foodSprite.sprite.bounds.size;
                 float scaleX = cellSize / spriteSize.x;
                 float scaleY = cellSize / spriteSize.y;
 
-                // Create the FoodTile
+              
                 GameObject foodTile = Instantiate(foodTilePrefab, position, Quaternion.identity);
                 foodTile.transform.parent = transform;
                 foodTile.transform.localScale = new Vector3(scaleX, scaleY, 1f);
                 foodTile.name = $"FoodTile_{randomX}_{randomY}";
 
-                // Add BoxCollider2D if it doesn't exist
+              
                 if (foodTile.GetComponent<BoxCollider2D>() == null)
                 {
                     BoxCollider2D collider = foodTile.AddComponent<BoxCollider2D>();
-                    collider.isTrigger = true; // Make it a trigger to avoid physics interactions
+                    collider.isTrigger = true; 
                 }
 
-                // Update the grid array with the new tile
+              
                 gridTiles[randomX, randomY] = foodTile;
                 break;
             }
@@ -306,7 +306,7 @@ public class GridPlacer : MonoBehaviour
         }
     }
 
-    // Add this new method to get a tile at a specific position
+  
     public GameObject GetTileAt(int x, int y)
     {
         if (x >= 0 && x < gridWidth && y >= 0 && y < gridHeight)
